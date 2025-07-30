@@ -1,0 +1,12 @@
+[
+  {
+    "title": "Inception",
+    "note": "Watch again!",
+    "watched": true
+  },
+  {
+    "title": "Interstellar",
+    "note": "Pending",
+    "watched": false
+  }
+]

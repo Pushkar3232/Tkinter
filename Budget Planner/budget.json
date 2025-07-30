@@ -1,0 +1,4 @@
+[
+  {"desc": "Salary", "amount": 50000, "type": "Income"},
+  {"desc": "Groceries", "amount": 2000, "type": "Expense"}
+]
