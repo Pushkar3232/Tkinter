@@ -1,48 +1,53 @@
 import tkinter as tk
-from tkinter import messagebox
-import os
+import random
 
-# Function to save note
-def save_note():
-    content = text_area.get("1.0", tk.END).strip()
-    if content:
-        with open("my_note.txt", "w", encoding="utf-8") as file:
-            file.write(content)
-        messagebox.showinfo("Saved", "Note saved successfully!")
+score = 0
+time_left = 30
+
+def move_button():
+    if time_left > 0:
+        x = random.randint(20, 250)
+        y = random.randint(60, 450)
+        tap_btn.place(x=x, y=y)
+
+def tap():
+    global score
+    score += 1
+    score_label.config(text=f"Score: {score}")
+    move_button()
+
+def countdown():
+    global time_left
+    if time_left > 0:
+        time_left -= 1
+        timer_label.config(text=f"Time: {time_left}")
+        root.after(1000, countdown)
     else:
-        messagebox.showwarning("Empty", "Note is empty!")
+        tap_btn.place_forget()
+        timer_label.config(text="Time's up!")
+        messagebox.showinfo("Game Over", f"Your Score: {score}")
 
-# Function to load note
-def load_note():
-    if os.path.exists("my_note.txt"):
-        with open("my_note.txt", "r", encoding="utf-8") as file:
-            content = file.read()
-        text_area.delete("1.0", tk.END)
-        text_area.insert(tk.END, content)
-    else:
-        messagebox.showerror("Not Found", "No saved note found!")
-
-# GUI setup
+# GUI Setup
 root = tk.Tk()
-root.title("My Notes")
-root.geometry("300x500")  # Good size for Pydroid app
-root.configure(bg="#f0f0f0")
+root.title("Tap Game")
+root.geometry("300x500")
+root.resizable(False, False)
 
-# Heading
-title = tk.Label(root, text="Notes App", font=("Arial", 18, "bold"), bg="#f0f0f0")
+from tkinter import messagebox
+
+title = tk.Label(root, text="Tap the Button!", font=("Arial", 18, "bold"))
 title.pack(pady=10)
 
-# Text input area
-text_area = tk.Text(root, font=("Arial", 14), wrap="word", height=20, padx=10, pady=10)
-text_area.pack(padx=10, pady=10, fill="both", expand=True)
+score_label = tk.Label(root, text="Score: 0", font=("Arial", 14))
+score_label.pack()
 
-# Save button
-save_btn = tk.Button(root, text="Save", font=("Arial", 14), command=save_note, bg="#4CAF50", fg="white")
-save_btn.pack(pady=5, ipadx=10, ipady=5)
+timer_label = tk.Label(root, text="Time: 30", font=("Arial", 14))
+timer_label.pack()
 
-# Load button
-load_btn = tk.Button(root, text="Load", font=("Arial", 14), command=load_note, bg="#2196F3", fg="white")
-load_btn.pack(pady=5, ipadx=10, ipady=5)
+tap_btn = tk.Button(root, text="TAP ME!", font=("Arial", 14, "bold"), bg="orange", command=tap)
+tap_btn.place(x=100, y=200)
 
-# Start app
+# Start countdown
+root.after(1000, countdown)
+
 root.mainloop()
